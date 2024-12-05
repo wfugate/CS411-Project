@@ -1,11 +1,19 @@
 import pytest
 from flask import Flask
-from movie_collection.db import db
+
 from movie_collection.models.user_model import Users
-import json
+from movie_collection.db import db
+
+@pytest.fixture
+def sample_user():
+    return {
+        "username": "testuser",
+        "password": "testpass"
+    }
 
 @pytest.fixture
 def app():
+    """Create a Flask application for testing."""
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -19,131 +27,68 @@ def app():
     app.add_url_rule('/login', 'login', login, methods=['POST'])
     app.add_url_rule('/update-password', 'update_password', update_password, methods=['POST'])
     
-    db.init_app(app)
-    
-    with app.app_context():
-        db.create_all() # Creates a fresh test database
-        yield app
-        db.drop_all() # Cleans up after tests
+    return app
 
 @pytest.fixture
-def client(app):
-    return app.test_client()
+def session(app):
+    """Create a new database session for testing."""
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+        yield db.session
+        db.session.remove()
+        db.drop_all()
 
-"""
-    200: Success/OK (used for successful GET, PUT, or DELETE operations)
-    201: Created (used when successfully creating a new resource, like in /create-account)
-    400: Bad Request (when client sends invalid data)
-    401: Unauthorized (when credentials are invalid)
-    404: Not Found (when requested resource doesn't exist)
-"""
+##########################################################
+# User Creation
+##########################################################
 
-def test_create_account(client):
-    """Test account creation functionality."""
-    response = client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    assert response.status_code == 201
-    assert json.loads(response.data)['message'] == 'Account created successfully'
+def test_create_user(session, sample_user):
+    """Test creating a new user with a unique username."""
+    Users.create_user(**sample_user)
+    user = session.query(Users).filter_by(username=sample_user["username"]).first()
+    assert user is not None, "User should be created in the database."
+    assert user.username == sample_user["username"], "Username should match the input."
+    assert len(user.salt) == 32, "Salt should be 32 characters (hex)."
+    assert len(user.password) == 64, "Password should be a 64-character SHA-256 hash."
 
-def test_create_account_duplicate_username(client):
-    """Test creating account with existing username."""
-    # Create first user
-    client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    
-    # Try to create second user with same username
-    response = client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'different_password'
-    })
-    assert response.status_code == 400
-    assert "already exists" in json.loads(response.data)['error']
+def test_create_duplicate_user(session, sample_user):
+    """Test attempting to create a user with a duplicate username."""
+    Users.create_user(**sample_user)
+    with pytest.raises(ValueError, match="User with username 'testuser' already exists"):
+        Users.create_user(**sample_user)
 
-def test_login_success(client):
-    """Test successful login."""
-    # Create test user
-    client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    
-    # Test login
-    response = client.post('/login', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    assert response.status_code == 200
-    assert json.loads(response.data)['message'] == 'Login successful'
+##########################################################
+# User Authentication
+##########################################################
 
-def test_login_user_not_found(client):
-    """Test login with non-existent username."""
-    response = client.post('/login', json={
-        'username': 'nonexistent',
-        'password': 'testpass'
-    })
-    assert response.status_code == 404
-    assert "not found" in json.loads(response.data)['error']
+def test_check_password_correct(session, sample_user):
+    """Test checking the correct password."""
+    Users.create_user(**sample_user)
+    assert Users.check_password(sample_user["username"], sample_user["password"]) is True, "Password should match."
 
-def test_login_invalid_password(client):
-    """Test login with incorrect password."""
-    # Create user
-    client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    
-    # Try login with wrong password
-    response = client.post('/login', json={
-        'username': 'testuser',
-        'password': 'wrongpass'
-    })
-    assert response.status_code == 401
-    assert "Invalid credentials" in json.loads(response.data)['error']
+def test_check_password_incorrect(session, sample_user):
+    """Test checking an incorrect password."""
+    Users.create_user(**sample_user)
+    assert Users.check_password(sample_user["username"], "wrongpassword") is False, "Password should not match."
 
-def test_update_password(client):
-    """Test password update functionality."""
-    # Create test user
-    client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'oldpass'
-    })
-    
-    # Update password
-    response = client.post('/update-password', json={
-        'username': 'testuser',
-        'old_password': 'oldpass',
-        'new_password': 'newpass'
-    })
-    assert response.status_code == 200
-    assert json.loads(response.data)['message'] == 'Password updated successfully'
+def test_check_password_user_not_found(session):
+    """Test checking password for a non-existent user."""
+    with pytest.raises(ValueError, match="User nonexistentuser not found"):
+        Users.check_password("nonexistentuser", "password")
 
-def test_update_password_user_not_found(client):
-    """Test updating password for non-existent user."""
-    response = client.post('/update-password', json={
-        'username': 'nonexistent',
-        'old_password': 'oldpass',
-        'new_password': 'newpass'
-    })
-    assert response.status_code == 404
-    assert "not found" in json.loads(response.data)['error']
+##########################################################
+# Update Password
+##########################################################
 
-def test_update_password_invalid_old_password(client):
-    """Test updating password with incorrect old password."""
-    # Create user
-    client.post('/create-account', json={
-        'username': 'testuser',
-        'password': 'testpass'
-    })
-    
-    # Try updating with wrong old password
-    response = client.post('/update-password', json={
-        'username': 'testuser',
-        'old_password': 'wrongpass',
-        'new_password': 'newpass'
-    })
-    assert response.status_code == 401
-    assert "Invalid" in json.loads(response.data)['error']
+def test_update_password(session, sample_user):
+    """Test updating the password for an existing user."""
+    Users.create_user(**sample_user)
+    new_password = "newpass"
+    Users.update_password(sample_user["username"], new_password)
+    assert Users.check_password(sample_user["username"], new_password) is True, "Password should be updated successfully."
+
+def test_update_password_user_not_found(session):
+    """Test updating the password for a non-existent user."""
+    with pytest.raises(ValueError, match="User nonexistentuser not found"):
+        Users.update_password("nonexistentuser", "newpass")
