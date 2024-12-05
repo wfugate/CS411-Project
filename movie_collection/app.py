@@ -17,6 +17,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+####################################################
+#
+# Healthchecks
+#
+####################################################
+
 @app.route('/health', methods=['GET'])
 def healthcheck():
     """
@@ -27,6 +33,12 @@ def healthcheck():
     """
     logger.info('Health check requested')
     return make_response(jsonify({'status': 'healthy'}), 200)
+
+####################################################
+#
+# user_model
+#
+####################################################
 
 @app.route('/create-account', methods=['POST'])
 def create_account():
