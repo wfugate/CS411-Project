@@ -10,8 +10,6 @@ import random
 logger = logging.getLogger(__name__)
 configure_logger(logger)
 
-
-
 @dataclass
 class Movie:
     """
