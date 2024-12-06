@@ -103,6 +103,9 @@ def find_movie_by_year(year: int) -> Movie:
     response = requests.get(url, params=params)
     data = response.json()
 
+    if not isinstance(year, int):
+        raise ValueError("Year must be an integer")
+
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
@@ -147,6 +150,9 @@ def search_movie_by_language(language_code: str) -> Movie:
     
     response = requests.get(url, params=params)
     data = response.json()
+
+    if not language_code:
+        raise ValueError("Language code cannot be empty")
 
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
