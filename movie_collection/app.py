@@ -2,6 +2,16 @@ from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from movie_collection.db import db
 from movie_collection.models.user_model import Users
+
+from movie_collection.models.movie_model import (
+    Movie, 
+    find_movie_by_name,
+    find_movie_by_year,
+    search_movie_by_language,
+    search_movie_by_director,
+    search_movie_by_genre
+)
+
 import logging
 from dotenv import load_dotenv
 
@@ -163,6 +173,205 @@ def update_password():
         logger.error('Unexpected error during password update: %s', str(e))
         return make_response(jsonify({'error': 'An error occurred while updating the password'}), 500)
 
+##########################################################
+#
+# Movie Management
+#
+##########################################################
+
+@app.route('/movies/search-by-name', methods=['GET'])
+def search_by_name():
+    """
+    Search for a movie by name.
+
+    Expected Query Parameters:
+        - name (str): The name of the movie to search for
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Processing movie search by name request')
+    name = request.args.get('name')
+    
+    if not name:
+        logger.error('Missing movie name in request')
+        return make_response(jsonify({'error': 'Movie name is required'}), 400)
+    
+    try:
+        movie = find_movie_by_name(name)
+        logger.info('Movie found: %s', movie.name)
+        return make_response(jsonify({
+            'name': movie.name,
+            'year': movie.year,
+            'director': movie.director,
+            'genres': movie.genres,
+            'original_language': movie.original_language
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error during movie search: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error during movie search: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
+
+@app.route('/movies/random-by-year', methods=['GET'])
+def random_by_year():
+    """
+    Get a random movie from a specific year.
+
+    Expected Query Parameters:
+        - year (int): The year to search for
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Processing random movie by year request')
+    try:
+        year = int(request.args.get('year', 0))
+    except ValueError:
+        logger.error('Invalid year format provided')
+        return make_response(jsonify({'error': 'Year must be a valid integer'}), 400)
+    
+    if year < 1900:
+        logger.error('Invalid year provided: %d', year)
+        return make_response(jsonify({'error': 'Year must be 1900 or later'}), 400)
+    
+    try:
+        movie = find_movie_by_year(year)
+        logger.info('Movie found: %s', movie.name)
+        return make_response(jsonify({
+            'name': movie.name,
+            'year': movie.year,
+            'director': movie.director,
+            'genres': movie.genres,
+            'original_language': movie.original_language
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error during movie search: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error during movie search: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
+
+@app.route('/movies/search-by-language', methods=['GET'])
+def search_by_language():
+    """
+    Search for movies by original language.
+
+    Expected Query Parameters:
+        - language_code (str): The language code to search for
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Processing movie search by language request')
+    language_code = request.args.get('language_code')
+    
+    if not language_code:
+        logger.error('Missing language code in request')
+        return make_response(jsonify({'error': 'Language code is required'}), 400)
+    
+    try:
+        movie = search_movie_by_language(language_code)
+        logger.info('Movie found: %s', movie.name)
+        return make_response(jsonify({
+            'name': movie.name,
+            'year': movie.year,
+            'director': movie.director,
+            'genres': movie.genres,
+            'original_language': movie.original_language
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error during movie search: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error during movie search: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
+
+@app.route('/movies/search-by-director', methods=['GET'])
+def search_by_director():
+    """
+    Search for movies by director name.
+
+    Expected Query Parameters:
+        - director (str): The name of the director to search for
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Processing movie search by director request')
+    director = request.args.get('director')
+    
+    if not director:
+        logger.error('Missing director name in request')
+        return make_response(jsonify({'error': 'Director name is required'}), 400)
+    
+    try:
+        movie = search_movie_by_director(director)
+        logger.info('Movie found: %s', movie.name)
+        return make_response(jsonify({
+            'name': movie.name,
+            'year': movie.year,
+            'director': movie.director,
+            'genres': movie.genres,
+            'original_language': movie.original_language
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error during movie search: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error during movie search: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
+
+@app.route('/movies/search-by-genre', methods=['GET'])
+def search_by_genre():
+    """
+    Search for movies by genre ID.
+
+    Expected Query Parameters:
+        - genre_id (int): The ID of the genre to search for
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Processing movie search by genre request')
+    try:
+        genre_id = int(request.args.get('genre_id', 0))
+    except ValueError:
+        logger.error('Invalid genre ID format provided')
+        return make_response(jsonify({'error': 'Genre ID must be a valid integer'}), 400)
+    
+    if genre_id <= 0:
+        logger.error('Invalid genre ID provided: %d', genre_id)
+        return make_response(jsonify({'error': 'Genre ID must be a positive integer'}), 400)
+    
+    try:
+        movie = search_movie_by_genre(genre_id)
+        logger.info('Movie found: %s', movie.name)
+        return make_response(jsonify({
+            'name': movie.name,
+            'year': movie.year,
+            'director': movie.director,
+            'genres': movie.genres,
+            'original_language': movie.original_language
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error during movie search: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error during movie search: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
+    
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
