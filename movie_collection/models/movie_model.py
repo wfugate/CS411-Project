@@ -14,22 +14,40 @@ configure_logger(logger)
 
 @dataclass
 class Movie:
+    """
+    A class representing a movie with basic information.
+
+    Attributes:
+        name (str): The title of the movie
+        year (int): The release year of the movie
+        director (str): The director of the movie
+        genres (list): List of genres associated with the movie
+        original_language (str): The original language of the movie
+    """
     name: str
     year: int
     director: str
     genres: list
     original_language: str
 
-
     def __post_init__(self):
-        if self.duration <= 0:
-            raise ValueError(f"Duration must be greater than 0, got {self.duration}")
         if self.year <= 1900:
             raise ValueError(f"Year must be greater than 1900, got {self.year}")
 
 
 def find_movie_by_name(name: str) -> Movie:
-    """Search for a movie by its name and return a Movie object."""
+    """
+    Search for a movie by its name using the TMDB API.
+
+    Args:
+        name (str): The name of the movie to search for.
+
+    Returns:
+        Movie: A Movie object containing the movie information.
+
+    Raises:
+        ValueError: If no movies are found with the given name.
+    """
     url = f"{BASE_URL}/search/movie"
     params = {'api_key': API_KEY, 'query': name}
     
@@ -66,7 +84,18 @@ def find_movie_by_name(name: str) -> Movie:
         raise ValueError("No movies found.")
 
 def find_movie_by_year(year: int) -> Movie:
-    """Search for a random movie by year and return a Movie object."""
+    """
+    Search for a random movie from a specific year using the TMDB API.
+
+    Args:
+        year (int): The year to search for movies.
+
+    Returns:
+        Movie: A Movie object containing the movie information.
+
+    Raises:
+        ValueError: If no movies are found for the given year or if the year is invalid.
+    """
     url = f"{BASE_URL}/discover/movie"
     params = {'api_key': API_KEY, 'primary_release_year': year}
     
@@ -100,7 +129,18 @@ def find_movie_by_year(year: int) -> Movie:
         raise ValueError("No movies found for this year.")
         
 def search_movie_by_language(language_code: str) -> Movie:
-    """Search for movies by original language and return a Movie object."""
+    """
+    Search for movies by original language using the TMDB API.
+
+    Args:
+        language_code (str): The language code to search for.
+
+    Returns:
+        Movie: A Movie object containing the movie information.
+
+    Raises:
+        ValueError: If no movies are found for the given language or if the language code is invalid.
+    """
     url = f"{BASE_URL}/discover/movie"
     params = {'api_key': API_KEY, 'language': language_code}
     
@@ -134,7 +174,18 @@ def search_movie_by_language(language_code: str) -> Movie:
         raise ValueError("No movies found for this language.")
     
 def search_movie_by_director(director_name: str) -> Movie:
-    """Search for movies by a specific director and return a Movie object."""
+    """
+    Search for movies by a specific director using the TMDB API.
+
+    Args:
+        director_name (str): The name of the director to search for.
+
+    Returns:
+        Movie: A Movie object containing the movie information.
+
+    Raises:
+        ValueError: If the director is not found or if no movies are found for the director.
+    """
     # Step 1: Search for the director's person ID
     url = f"{BASE_URL}/search/person"
     params = {'api_key': API_KEY, 'query': director_name}
@@ -175,7 +226,18 @@ def search_movie_by_director(director_name: str) -> Movie:
         raise ValueError("Director not found.")
 
 def search_movie_by_genre(genre_id: int) -> Movie:
-    """Search for movies by genre and return a Movie object."""
+    """
+    Search for movies by genre using the TMDB API.
+
+    Args:
+        genre_id (int): The ID of the genre to search for.
+
+    Returns:
+        Movie: A Movie object containing the movie information.
+
+    Raises:
+        ValueError: If no movies are found for the given genre or if the genre ID is invalid.
+    """
     url = f"{BASE_URL}/discover/movie"
     params = {'api_key': API_KEY, 'with_genres': genre_id}
     
