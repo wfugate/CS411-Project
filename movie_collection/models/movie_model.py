@@ -10,6 +10,9 @@ import random
 logger = logging.getLogger(__name__)
 configure_logger(logger)
 
+API_KEY = 'd3931fa0f5369b7ba2bb2981001bb8f9'
+BASE_URL = 'https://api.themoviedb.org/3'
+
 @dataclass
 class Movie:
     """
