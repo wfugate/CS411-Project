@@ -89,6 +89,65 @@ def create_movie(name: str, year: int, director: str, genres: list, original_lan
         logger.error("Database error: %s", str(e))
         raise e
 
+def delete_movie(movie_id: int) -> None:
+    """
+    Soft deletes a movie from the catalog by marking it as deleted.
+
+    Args:
+        movie_id (int): The ID of the movie to delete.
+
+    Raises:
+        ValueError: If the movie with the given ID does not exist or is already marked as deleted.
+        sqlite3.Error: If any database error occurs.
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+
+            # Check if the movie exists and if it's already deleted
+            cursor.execute("SELECT deleted FROM movies WHERE id = ?", (movie_id,))
+            result = cursor.fetchone()
+
+            if result is None:
+                logger.info("Movie with ID %s not found", movie_id)
+                raise ValueError(f"Movie with ID {movie_id} not found")
+
+            deleted = result[0]
+            if deleted:
+                logger.info("Movie with ID %s has already been deleted", movie_id)
+                raise ValueError(f"Movie with ID {movie_id} has already been deleted")
+
+            # Perform the soft delete by setting 'deleted' to TRUE
+            cursor.execute("UPDATE movies SET deleted = TRUE WHERE id = ?", (movie_id,))
+            conn.commit()
+
+            logger.info("Movie with ID %s marked as deleted.", movie_id)
+
+    except sqlite3.Error as e:
+        logger.error("Database error while deleting movie: %s", str(e))
+        raise e
+
+def clear_catalog() -> None:
+    """
+    Recreates the movie table, effectively deleting all movies.
+
+    Raises:
+        sqlite3.Error: If any database error occurs.
+    """
+    try:
+        with open(os.getenv("SQL_CREATE_TABLE_PATH", "/app/sql/create_movie_table.sql"), "r") as fh:
+            create_table_script = fh.read()
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.executescript(create_table_script)
+            conn.commit()
+
+            logger.info("Catalog cleared successfully.")
+
+    except sqlite3.Error as e:
+        logger.error("Database error while clearing catalog: %s", str(e))
+        raise e
+        
 def find_movie_by_name(name: str) -> Movie:
     """
     Search for a movie by name using the TMDB API.

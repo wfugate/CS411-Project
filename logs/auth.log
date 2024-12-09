@@ -176,3 +176,25 @@
 2024-12-08 23:35:34,089 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
 2024-12-08 23:36:45,965 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
 2024-12-08 23:37:01,510 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:49:04,741 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:49:25,871 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:41,345 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:58,168 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:58,180 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:52:13,538 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:52:13,550 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:59:45,933 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:59:45,946 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:59:45,950 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 00:59:46,002 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 00:59:46,005 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted
+2024-12-09 01:00:55,001 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 01:00:55,012 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 01:00:55,015 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 01:00:55,067 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 01:00:55,069 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted
+2024-12-09 01:01:50,377 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 01:01:50,389 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 01:01:50,392 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 01:01:50,394 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 01:01:50,395 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted
