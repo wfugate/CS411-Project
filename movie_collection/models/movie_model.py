@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from contextlib import contextmanager
 import logging
 import os
 import sqlite3
@@ -6,6 +7,15 @@ import sqlite3
 from movie_collection.utils.logger import configure_logger
 import requests
 import random
+
+@contextmanager
+def get_db_connection():
+    conn = sqlite3.connect('movies.db') 
+    try:
+        yield conn
+    finally:
+        conn.close()
+
 
 logger = logging.getLogger(__name__)
 configure_logger(logger)
@@ -247,7 +257,7 @@ def search_movie_by_director(director_name: str) -> Movie:
         else:
             raise ValueError(f"No movies found with the director '{director_name}'.")
     else: 
-        raise ValueError(f"Director, '{director_name}', not found.")
+        raise ValueError(f"Director not found.")
 
 def search_movie_by_genre(genre_id: int) -> Movie:
     """
