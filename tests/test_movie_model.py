@@ -1,15 +1,185 @@
+from contextlib import contextmanager
+import re
+import sqlite3
 import pytest
-from movie_collection.models.movie_model import Movie, find_movie_by_name, find_movie_by_year, search_movie_by_language, search_movie_by_director, search_movie_by_genre
 
+from movie_collection.models.movie_model import (
+    Movie,
+    create_movie,
+    delete_movie, 
+    clear_catalog,
+    find_movie_by_name,
+    find_movie_by_year,
+    search_movie_by_language,
+    search_movie_by_director,
+    search_movie_by_genre,
+)
+
+######################################################
+#
+#    Fixtures
+#
+######################################################
+
+def normalize_whitespace(sql_query: str) -> str:
+    return re.sub(r'\s+', ' ', sql_query).strip()
+
+# Mocking the database connection for tests
 @pytest.fixture
-def sample_movie():
-    return Movie(
-        name="Test Movie",
-        year=2023,
-        director="Test Director",
-        genres=["Action", "Drama"],
-        original_language="en"
+def mock_cursor(mocker):
+    mock_conn = mocker.Mock()
+    mock_cursor = mocker.Mock()
+
+    # Mock the connection's cursor
+    mock_conn.cursor.return_value = mock_cursor
+    mock_cursor.fetchone.return_value = None  # Default return for queries
+    mock_cursor.fetchall.return_value = []
+    mock_conn.commit.return_value = None
+
+    # Mock the get_db_connection context manager from sql_utils
+    @contextmanager
+    def mock_get_db_connection():
+        yield mock_conn  # Yield the mocked connection object
+
+    mocker.patch("movie_collection.models.movie_model.get_db_connection", mock_get_db_connection)
+
+    return mock_cursor  # Return the mock cursor so we can set expectations per test
+
+##########################################################
+# Movie Creation Tests
+##########################################################
+
+def test_create_movie(mock_cursor):
+    """Test creating a new movie in the catalog."""
+    create_movie(
+        name="Movie Title",
+        year=2022,
+        director="Director Name",
+        genres=["Drama", "Action"],
+        original_language="en",
     )
+
+    expected_query = normalize_whitespace("""
+        INSERT INTO movies (name, year, director, genres, original_language)
+        VALUES (?, ?, ?, ?, ?)
+    """)
+
+    actual_query = normalize_whitespace(mock_cursor.execute.call_args[0][0])
+    assert actual_query == expected_query, "The SQL query did not match the expected structure."
+
+    actual_arguments = mock_cursor.execute.call_args[0][1]
+    expected_arguments = ("Movie Title", 2022, "Director Name", "Drama, Action", "en")
+    assert actual_arguments == expected_arguments, f"Arguments mismatch: expected {expected_arguments}, got {actual_arguments}."
+
+
+def test_create_movie_duplicate(mock_cursor):
+    """Test creating a movie with a duplicate name."""
+    mock_cursor.execute.side_effect = sqlite3.IntegrityError("UNIQUE constraint failed: movies.name")
+    with pytest.raises(ValueError, match="Movie with name 'Movie Title' already exists"):
+        create_movie(name="Movie Title", year=2022, director="Director Name", genres=["Drama", "Action"], original_language="en")
+
+
+def test_create_movie_invalid_year():
+    """Test error when creating a movie with invalid year."""
+    with pytest.raises(ValueError, match="Invalid release year: 1887. Must be a valid integer year."):
+        create_movie(name="Movie Title", year=1887, director="Director Name", genres=["Drama"], original_language="en")
+
+    with pytest.raises(ValueError, match="Invalid release year: invalid. Must be a valid integer year."):
+        create_movie(name="Movie Title", year="invalid", director="Director Name", genres=["Drama"], original_language="en")
+
+
+def test_create_movie_invalid_genres():
+    """Test error when creating a movie with invalid genres."""
+    with pytest.raises(ValueError, match="Genres list cannot be empty."):
+        create_movie(name="Movie Title", year=2022, director="Director Name", genres=[], original_language="en")
+
+    with pytest.raises(ValueError, match="Genres list cannot be empty."):
+        create_movie(name="Movie Title", year=2022, director="Director Name", genres=None, original_language="en")
+
+
+def test_create_movie_invalid_language():
+    """Test error when creating a movie with invalid original language."""
+    with pytest.raises(ValueError, match="Invalid original language: ''. Must be a non-empty string."):
+        create_movie(name = "Movie Title", year = 2022, director = "Director Name", genres = ["Drama"], original_language = "")
+
+    with pytest.raises(ValueError, match="Invalid original language: '123'. Must be a non-empty string."):
+        create_movie(name = "Movie Title", year = 2022, director = "Director Name", genres = ["Drama"], original_language = 123)
+
+##########################################################
+# Clear Catalog
+##########################################################
+
+def test_clear_catalog(mock_cursor, mocker):
+    """Test clearing the entire movie catalog (removes all movies)."""
+
+    # Mock the file reading
+    mocker.patch.dict('os.environ', {'SQL_CREATE_TABLE_PATH': 'sql/create_movie_table.sql'})
+    mock_open = mocker.patch('builtins.open', mocker.mock_open(read_data="The body of the create statement"))
+
+    # Call the clear_database function
+    clear_catalog()
+
+    # Ensure the file was opened using the environment variable's path
+    mock_open.assert_called_once_with('sql/create_movie_table.sql', 'r')
+
+    # Verify that the correct SQL script was executed
+    mock_cursor.executescript.assert_called_once()
+
+##########################################################
+# Movie Deletion Tests
+##########################################################
+
+def test_delete_movie(mock_cursor):
+    """Test soft deleting a movie from the catalog by movie ID."""
+
+    # Simulate that the movie exists (id = 1)
+    mock_cursor.fetchone.return_value = ([False])
+
+    # Call the delete_movie function
+    delete_movie(1)
+
+    # Normalize the SQL for both queries (SELECT and UPDATE)
+    expected_select_sql = normalize_whitespace("SELECT deleted FROM movies WHERE id = ?")
+    expected_update_sql = normalize_whitespace("UPDATE movies SET deleted = TRUE WHERE id = ?")
+
+    # Access both calls to `execute()` using `call_args_list`
+    actual_select_sql = normalize_whitespace(mock_cursor.execute.call_args_list[0][0][0])
+    actual_update_sql = normalize_whitespace(mock_cursor.execute.call_args_list[1][0][0])
+
+    # Ensure the correct SQL queries were executed
+    assert actual_select_sql == expected_select_sql, "The SELECT query did not match the expected structure."
+    assert actual_update_sql == expected_update_sql, "The UPDATE query did not match the expected structure."
+
+    # Ensure the correct arguments were used in both SQL queries
+    expected_select_args = (1,)
+    expected_update_args = (1,)
+
+    actual_select_args = mock_cursor.execute.call_args_list[0][0][1]
+    actual_update_args = mock_cursor.execute.call_args_list[1][0][1]
+
+    assert actual_select_args == expected_select_args, f"The SELECT query arguments did not match. Expected {expected_select_args}, got {actual_select_args}."
+    assert actual_update_args == expected_update_args, f"The UPDATE query arguments did not match. Expected {expected_update_args}, got {actual_update_args}."
+
+
+def test_delete_movie_bad_id(mock_cursor):
+    """Test error when trying to delete a non-existent movie."""
+
+    # Simulate that no movie exists with the given ID
+    mock_cursor.fetchone.return_value = None
+
+    # Expect a ValueError when attempting to delete a non-existent movie
+    with pytest.raises(ValueError, match="Movie with ID 999 not found"):
+        delete_movie(999)
+
+def test_delete_movie_already_deleted(mock_cursor):
+    """Test error when trying to delete a movie that's already marked as deleted."""
+
+    # Simulate that the movie exists but is already marked as deleted
+    mock_cursor.fetchone.return_value = ([True])
+
+    # Expect a ValueError when attempting to delete a movie that's already been deleted
+    with pytest.raises(ValueError, match="Movie with ID 999 has already been deleted"):
+        delete_movie(999)
 
 ##########################################################
 # Movie Search Tests
@@ -34,7 +204,7 @@ def test_find_movie_by_name(mocker):
             'title': 'Test Movie',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': []
+            'genres': ['Test']
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
@@ -61,7 +231,7 @@ def test_find_movie_by_year(mocker):
             'title': 'Test Movie',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': []
+            'genres': ["Test"]
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
@@ -81,7 +251,7 @@ def test_find_movie_by_year_not_found(mocker):
     mock_response.json.return_value = {'results': []}
     mocker.patch('requests.get', return_value=mock_response)
     
-    with pytest.raises(ValueError, match="No movies found for this year."):
+    with pytest.raises(ValueError, match="No movies found for the year: '1800'."):
         find_movie_by_year(1800)
 
 def test_find_movie_by_year_invalid_type():
@@ -91,7 +261,7 @@ def test_find_movie_by_year_invalid_type():
 
 def test_find_movie_by_year_invalid_value():
     """Test searching for a movie with invalid year value."""
-    with pytest.raises(ValueError, match="No movies found for this year."):
+    with pytest.raises(ValueError, match="No movies found for the year: '1800'."):
         find_movie_by_year(1800)
 
 def test_search_movie_by_language(mocker):
@@ -102,13 +272,17 @@ def test_search_movie_by_language(mocker):
             'title': 'Test Movie',
             'release_date': '2023-01-01',
             'original_language': 'fr',
-            'genres': []
+            'genres': ["Test"]
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
     
     movie = search_movie_by_language("fr")
-    assert movie.original_language == "fr"
+    
+    # Access the first result from the 'results' list
+    result = mock_response.json()['results'][0]
+    
+    assert movie.original_language == result['original_language']
     assert isinstance(movie, Movie)
 
 def test_search_movie_by_language_empty_input():
@@ -167,7 +341,7 @@ def test_search_movie_by_director_no_movies(mocker):
     mock_credits.json.return_value = {'crew': []}
     mocker.patch('requests.get', side_effect=[mock_response, mock_credits])
     
-    with pytest.raises(ValueError, match="No directed movies found for this director"):
+    with pytest.raises(ValueError, match="No movies found with the director 'Test Director'."):
         search_movie_by_director("Test Director")
 
 def test_search_movie_by_genre(mocker):
@@ -178,7 +352,7 @@ def test_search_movie_by_genre(mocker):
             'title': 'Test Movie',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': []
+            'genres': ['Test']
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
@@ -188,5 +362,5 @@ def test_search_movie_by_genre(mocker):
 
 def test_search_movie_by_genre_invalid_id():
     """Test searching for a movie with invalid genre ID."""
-    with pytest.raises(ValueError, match="No movies found for this genre."):
+    with pytest.raises(ValueError, match="No movies found with the genre with ID '-1'"):
         search_movie_by_genre(-1)

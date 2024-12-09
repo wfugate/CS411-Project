@@ -1,0 +1,200 @@
+2024-12-08 21:03:01,056 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:03:01,058 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:03:01,073 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:10:11,933 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:10:11,935 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:10:11,940 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:11:16,785 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:11:16,788 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:11:16,793 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:11:46,159 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:11:46,161 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:11:46,167 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:12:00,018 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:12:00,021 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:12:00,027 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:12:26,771 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:12:26,774 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:12:26,779 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:12:41,483 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:12:41,486 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:12:41,491 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:13:31,816 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:13:31,818 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:13:31,823 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:14:10,932 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:14:10,934 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:14:10,939 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:14:31,686 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:14:31,690 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:14:31,696 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:14:49,303 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:14:49,308 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:14:49,313 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 21:15:39,452 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 21:15:39,456 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 21:15:39,461 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:21:33,618 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:21:33,621 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:21:33,625 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:23:56,182 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:23:56,184 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:23:56,188 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:24:15,515 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:24:15,517 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:24:15,521 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:25:11,511 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:25:11,514 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:25:11,518 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:31:43,710 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:31:43,712 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:31:43,717 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:34:42,251 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:34:42,253 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:34:42,259 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:35:25,800 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:35:25,804 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:35:25,809 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:38:44,850 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:38:44,855 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:38:44,860 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:40:13,636 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:40:13,638 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:40:13,643 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:42:12,854 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:42:12,856 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:42:12,861 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:44:42,787 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:44:42,789 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:44:42,794 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:46:19,760 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:46:19,762 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:46:19,766 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:46:52,818 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:46:52,821 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:46:52,826 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:47:08,395 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:47:08,397 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:47:08,403 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:49:02,995 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:49:02,997 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:49:03,002 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:49:50,515 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:49:50,517 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:49:50,521 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:50:25,582 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:50:25,586 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:50:25,590 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:50:56,872 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:50:56,873 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:50:56,879 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:51:36,591 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:51:36,594 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:51:36,598 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:52:33,410 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:52:33,412 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:52:33,417 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:52:46,284 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:52:46,286 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:52:46,293 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:53:21,646 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:53:21,650 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:53:21,656 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:54:11,877 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:54:11,879 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:54:11,884 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:55:08,504 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:55:08,506 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:55:08,510 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:55:08,796 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:55:46,134 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:55:46,136 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:55:46,141 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 22:57:41,118 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 22:57:41,121 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 22:57:41,127 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:00:12,777 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:00:12,780 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:00:12,786 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:03:08,807 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:03:08,809 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:03:08,814 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:04:30,099 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:04:30,101 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:04:30,105 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:04:43,570 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:04:43,573 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:05:28,243 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:05:28,246 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:05:28,250 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:07:14,680 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:07:14,683 - movie_collection.models.movie_model - ERROR - Duplicate movie name: Movie Title
+2024-12-08 23:07:14,686 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:11:42,723 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:11:42,729 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:12:11,305 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:12:11,357 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:12:24,197 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:12:24,204 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:15:19,094 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:15:19,100 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:17:03,873 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:17:03,879 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:17:09,917 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:17:09,927 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:17:24,552 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:17:24,558 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:17:51,516 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:17:51,523 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:19:47,054 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:19:47,060 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:20:18,548 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:20:18,557 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:21:38,410 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:21:38,416 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:22:26,125 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:22:26,131 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:23:39,008 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:23:39,065 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:23:48,668 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:23:48,674 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:27:11,217 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:27:11,224 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:28:34,319 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:28:34,327 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:29:36,765 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:31:05,455 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:31:05,461 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:31:29,967 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:31:29,973 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:34:46,180 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:35:11,976 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:35:22,816 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:35:22,822 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:35:28,919 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:35:28,926 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
+2024-12-08 23:35:34,089 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:36:45,965 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:37:01,510 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:49:04,741 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:49:25,871 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:41,345 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:58,168 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:51:58,180 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:52:13,538 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:52:13,550 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:59:45,933 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 00:59:45,946 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 00:59:45,950 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 00:59:46,002 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 00:59:46,005 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted
+2024-12-09 01:00:55,001 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 01:00:55,012 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 01:00:55,015 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 01:00:55,067 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 01:00:55,069 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted
+2024-12-09 01:01:50,377 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-09 01:01:50,389 - movie_collection.models.movie_model - INFO - Catalog cleared successfully.
+2024-12-09 01:01:50,392 - movie_collection.models.movie_model - INFO - Movie with ID 1 marked as deleted.
+2024-12-09 01:01:50,394 - movie_collection.models.movie_model - INFO - Movie with ID 999 not found
+2024-12-09 01:01:50,395 - movie_collection.models.movie_model - INFO - Movie with ID 999 has already been deleted

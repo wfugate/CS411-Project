@@ -1,12 +1,10 @@
-DROP TABLE IF EXISTS songs;
+DROP TABLE IF EXISTS movies;
 CREATE TABLE movies (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    artist TEXT NOT NULL,
-    title TEXT NOT NULL,
-    year INTEGER NOT NULL CHECK(year >= 1900),
-    genre TEXT NOT NULL,
-    duration INTEGER NOT NULL CHECK(duration > 0),
-    play_count INTEGER DEFAULT 0,
-    deleted BOOLEAN DEFAULT FALSE,
-    UNIQUE(artist, title, year)
+    name TEXT UNIQUE NOT NULL,
+    year INTEGER NOT NULL,
+    director TEXT NOT NULL,
+    genres TEXT NOT NULL,
+    original_language TEXT NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE
 );
