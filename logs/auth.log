@@ -174,3 +174,5 @@
 2024-12-08 23:35:28,919 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
 2024-12-08 23:35:28,926 - movie_collection.models.movie_model - ERROR - Database error: no such table: movies
 2024-12-08 23:35:34,089 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:36:45,965 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title
+2024-12-08 23:37:01,510 - movie_collection.models.movie_model - INFO - Movie successfully added to the database: Movie Title

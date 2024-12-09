@@ -10,7 +10,7 @@ import random
 
 @contextmanager
 def get_db_connection():
-    conn = sqlite3.connect('movies.db') 
+    conn = sqlite3.connect('create_movie_table.sql') 
     try:
         yield conn
     finally:
