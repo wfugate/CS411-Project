@@ -66,6 +66,10 @@ def create_movie(name: str, year: int, director: str, genres: list, original_lan
         raise ValueError(f"Invalid release year: {year}. Must be a valid integer year greater than 1900.")
     if not genres:
         raise ValueError("Genres list cannot be empty.")
+        
+    if not isinstance(original_language, str) or not original_language:
+        raise ValueError(f"Invalid original language: '{original_language}'. Must be a non-empty string.")
+
     
     try:
         with get_db_connection() as conn:
@@ -79,7 +83,6 @@ def create_movie(name: str, year: int, director: str, genres: list, original_lan
             logger.info("Movie successfully added to the database: %s", name)
 
     except sqlite3.IntegrityError:
-        logger.error("Duplicate movie name: %s", name)
         raise ValueError(f"Movie with name '{name}' already exists")
 
     except sqlite3.Error as e:
@@ -88,7 +91,7 @@ def create_movie(name: str, year: int, director: str, genres: list, original_lan
 
 def find_movie_by_name(name: str) -> Movie:
     """
-    Search for a movie by its name using the TMDB API.
+    Search for a movie by name using the TMDB API.
 
     Args:
         name (str): The name of the movie to search for.
@@ -108,23 +111,16 @@ def find_movie_by_name(name: str) -> Movie:
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
-        release_year = int(random_movie['release_date'][:4])
+        release_date = random_movie['release_date']
+        release_year = int(release_date[:4])
         original_language = random_movie['original_language']
         
-        # Get the director
-        director = "Unknown"
-        for crew_member in random_movie.get('credits', {}).get('crew', []):
-            if crew_member['job'] == 'Director':
-                director = crew_member['name']
-                break
-        
         # Get the genres
-        genres = [genre['name'] for genre in random_movie.get('genres', [])]
-
-        # Add the movie to the database
-        create_movie(movie_name, release_year, director, genres, original_language)
+        genres = random_movie['genres']
+        
+        return Movie(movie_name, release_year, "Unknown", genres, original_language)
     else:
-        raise ValueError(f"No movies found with the name '{name}'.")
+        raise ValueError("No movies found.")
 
 def find_movie_by_year(year: int) -> Movie:
     """
@@ -151,7 +147,8 @@ def find_movie_by_year(year: int) -> Movie:
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
-        release_year = int(random_movie['release_date'][:4])
+        release_date = random_movie['release_date']
+        release_year = int(release_date[:4])
         original_language = random_movie['original_language']
         
         # Get the director
@@ -160,15 +157,20 @@ def find_movie_by_year(year: int) -> Movie:
             if crew_member['job'] == 'Director':
                 director = crew_member['name']
                 break
-        
-        # Get the genres
-        genres = [genre['name'] for genre in random_movie.get('genres', [])]
 
-        # Add the movie to the database
-        create_movie(movie_name, release_year, director, genres, original_language)
+        # Get the genres
+        genres = random_movie.get('genres', [])
+
+        return Movie(
+            movie_name,
+            release_year,
+            director,
+            genres,
+            original_language
+        )
     else:
-        raise ValueError(f"No movies found with the year '{year}'.")
-        
+        raise ValueError(f"No movies found for the year: '{year}'.")
+
 def search_movie_by_language(language_code: str) -> Movie:
     """
     Search for movies by original language using the TMDB API.
@@ -194,7 +196,8 @@ def search_movie_by_language(language_code: str) -> Movie:
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
-        release_year = int(random_movie['release_date'][:4])
+        release_date = random_movie['release_date']
+        release_year = int(release_date[:4])
         original_language = random_movie['original_language']
         
         # Get the director
@@ -205,12 +208,17 @@ def search_movie_by_language(language_code: str) -> Movie:
                 break
         
         # Get the genres
-        genres = [genre['name'] for genre in random_movie.get('genres', [])]
+        genres = random_movie.get('genres', [])
 
-        # Add the movie to the database
-        create_movie(movie_name, release_year, director, genres, original_language)
+        return Movie(
+            movie_name,
+            release_year,
+            director,
+            genres,
+            original_language
+        )
     else:
-        raise ValueError(f"No movies found with the language '{original_language}'.")
+        raise ValueError(f"Invalid original language: '{original_language}'. Must be a non-empty string.")
     
 def search_movie_by_director(director_name: str) -> Movie:
     """
@@ -246,14 +254,20 @@ def search_movie_by_director(director_name: str) -> Movie:
         if directed_movies:
             random_movie = random.choice(directed_movies)
             movie_name = random_movie['title']
-            release_year = int(random_movie['release_date'][:4])
+            release_date = random_movie['release_date']
+            release_year = int(release_date[:4])
             original_language = random_movie['original_language']
             
             # Get the genres
-            genres = [genre['name'] for genre in random_movie.get('genres', [])]
+            genres = random_movie.get('genres', [])
 
-            # Add the movie to the database
-            create_movie(movie_name, release_year, director_name, genres, original_language)
+            return Movie(
+                movie_name,
+                release_year,
+                director_name,
+                genres,
+                original_language
+            )
         else:
             raise ValueError(f"No movies found with the director '{director_name}'.")
     else: 
@@ -281,7 +295,8 @@ def search_movie_by_genre(genre_id: int) -> Movie:
     if 'results' in data and data['results']:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
-        release_year = int(random_movie['release_date'][:4])
+        release_date = random_movie['release_date']
+        release_year = int(release_date[:4])
         original_language = random_movie['original_language']
         
         # Get the director
@@ -292,10 +307,15 @@ def search_movie_by_genre(genre_id: int) -> Movie:
                 break
         
         # Get the genres
-        genres = [genre['name'] for genre in random_movie.get('genres', [])]
-    
-    # Add the movie to the database
-        create_movie(movie_name, release_year, director, genres, original_language)
+        genres = random_movie.get('genres', [])
+
+        return Movie(
+            movie_name,
+            release_year,
+            director,
+            genres,
+            original_language
+        )
     else:
         raise ValueError(f"No movies found with the genre with ID '{genre_id}'.")
 

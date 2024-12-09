@@ -3,8 +3,6 @@ import re
 import sqlite3
 import pytest
 
-from movie_collection.models.movie_model import get_db_connection, create_movie
-
 from movie_collection.models.movie_model import (
     Movie,
     create_movie,
@@ -100,10 +98,12 @@ def test_create_movie_invalid_genres():
 def test_create_movie_invalid_language():
     """Test error when creating a movie with invalid original language."""
     with pytest.raises(ValueError, match="Invalid original language: ''. Must be a non-empty string."):
-        create_movie(name="Movie Title", year=2022, director="Director Name", genres=["Drama"], original_language="")
+        create_movie(name = "Movie Title", year = 2022, director = "Director Name", genres = ["Drama"], original_language = "")
 
-    with pytest.raises(ValueError, match="Invalid original language: 123. Must be a non-empty string."):
-        create_movie(name="Movie Title", year=2022, director="Director Name", genres=["Drama"], original_language=123)
+    with pytest.raises(ValueError, match="Invalid original language: '123'. Must be a non-empty string."):
+        create_movie(name = "Movie Title", year = 2022, director = "Director Name", genres = ["Drama"], original_language = 123)
+
+#    with pytest.raises(ValueError, match="Invalid original language: 123. Must be a non-empty string."):
 
 ##########################################################
 # Movie Search Tests
@@ -175,7 +175,7 @@ def test_find_movie_by_year_not_found(mocker):
     mock_response.json.return_value = {'results': []}
     mocker.patch('requests.get', return_value=mock_response)
     
-    with pytest.raises(ValueError, match="No movies found with the year '1800'."):
+    with pytest.raises(ValueError, match="No movies found for the year: '1800'."):
         find_movie_by_year(1800)
 
 def test_find_movie_by_year_invalid_type():
@@ -185,7 +185,7 @@ def test_find_movie_by_year_invalid_type():
 
 def test_find_movie_by_year_invalid_value():
     """Test searching for a movie with invalid year value."""
-    with pytest.raises(ValueError, match="No movies found with the year '1800'."):
+    with pytest.raises(ValueError, match="No movies found for the year: '1800'."):
         find_movie_by_year(1800)
 
 def test_search_movie_by_language(mocker):

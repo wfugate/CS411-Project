@@ -5,6 +5,5 @@ CREATE TABLE movies (
     year INTEGER NOT NULL,
     director TEXT NOT NULL,
     genres TEXT NOT NULL,
-    original_language TEXT NOT NULL,
-    deleted BOOLEAN DEFAULT FALSE
+    original_language TEXT NOT NULL
 );
