@@ -6,5 +6,6 @@ CREATE TABLE movies (
     director TEXT NOT NULL,
     genres TEXT NOT NULL,
     original_language TEXT NOT NULL,
+    favorite BOOLEAN DEFAULT FALSE,
     deleted BOOLEAN DEFAULT FALSE
 );

@@ -7,9 +7,9 @@ from movie_collection.models.movie_model import (
     Movie, 
     find_movie_by_name,
     find_movie_by_year,
-    search_movie_by_language,
-    search_movie_by_director,
-    search_movie_by_genre
+    find_movie_by_language,
+    find_movie_by_director,
+    find_movie_by_genre
 )
 
 import logging
@@ -283,7 +283,7 @@ def search_by_language():
         return make_response(jsonify({'error': 'Language code is required'}), 400)
     
     try:
-        movie = search_movie_by_language(language_code)
+        movie = find_movie_by_language(language_code)
         logger.info('Movie found: %s', movie.name)
         return make_response(jsonify({
             'status': 'success',
@@ -322,7 +322,7 @@ def search_by_director():
         return make_response(jsonify({'error': 'Director name is required'}), 400)
     
     try:
-        movie = search_movie_by_director(director)
+        movie = find_movie_by_director(director)
         logger.info('Movie found: %s', movie.name)
         return make_response(jsonify({
             'status': 'success',
@@ -366,7 +366,7 @@ def search_by_genre():
         return make_response(jsonify({'error': 'Genre ID must be a positive integer'}), 400)
     
     try:
-        movie = search_movie_by_genre(genre_id)
+        movie = find_movie_by_genre(genre_id)
         logger.info('Movie found: %s', movie.name)
         return make_response(jsonify({
             'status': 'success',
