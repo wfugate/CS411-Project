@@ -35,16 +35,16 @@ check_health() {
 }
 
 # Function to check the database connection
-# check_db() {
-#   echo "Checking database connection..."
-#   curl -s -X GET "$BASE_URL/db-check" | grep -q '"database_status": "healthy"'
-#   if [ $? -eq 0 ]; then
-#     echo "Database connection is healthy."
-#   else
-#     echo "Database check failed."
-#     exit 1
-#   fi
-# }
+check_db() {
+  echo "Checking database connection..."
+  curl -s -X GET "$BASE_URL/api/db-check" | grep -q '"database_status": "healthy"'
+  if [ $? -eq 0 ]; then
+    echo "Database connection is healthy."
+  else
+    echo "Database check failed."
+    exit 1
+  fi
+}
 
 ##########################################################
 #
@@ -176,7 +176,7 @@ search_by_genre(){
     
 # Health checks
 check_health
-# check_db
+check_db
 
 # User Management
 create_account "username" "password"
