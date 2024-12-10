@@ -12,6 +12,8 @@ from movie_collection.models.movie_model import (
     find_movie_by_genre
 )
 
+from movie_collection.utils.sql_utils import check_database_connection, check_table_exists
+
 import logging
 from dotenv import load_dotenv
 
@@ -43,6 +45,27 @@ def healthcheck() -> Response:
     """
     logger.info('Health check requested')
     return make_response(jsonify({'status': 'healthy'}), 200)
+
+@app.route('/api/db-check', methods=['GET'])
+def db_check() -> Response:
+    """
+    Route to check if the database connection and movies table are functional.
+
+    Returns:
+        JSON response indicating the database health status.
+    Raises:
+        404 error if there is an issue with the database.
+    """
+    try:
+        app.logger.info("Checking database connection...")
+        check_database_connection()
+        app.logger.info("Database connection is OK.")
+        app.logger.info("Checking if movies table exists...")
+        check_table_exists("movies")
+        app.logger.info("movies table exists.")
+        return make_response(jsonify({'database_status': 'healthy'}), 200)
+    except Exception as e:
+        return make_response(jsonify({'error': str(e)}), 404)
 
 ##########################################################
 #

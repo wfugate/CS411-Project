@@ -5,20 +5,12 @@ import os
 import sqlite3
 
 from movie_collection.utils.logger import configure_logger
+from movie_collection.utils.sql_utils import get_db_connection
 import requests
 import random
 
 API_KEY = 'd3931fa0f5369b7ba2bb2981001bb8f9'
 BASE_URL = 'https://api.themoviedb.org/3'
-
-@contextmanager
-def get_db_connection():
-    conn = sqlite3.connect('movies.db') 
-    try:
-        yield conn
-    finally:
-        conn.close()
-
 
 logger = logging.getLogger(__name__)
 configure_logger(logger)

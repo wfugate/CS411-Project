@@ -23,14 +23,14 @@ from movie_collection.models.movie_model import (
 #
 ######################################################
 
-@pytest.fixture(scope="session", autouse=True)
-def clear_table_before_suite():
-    """Clear the movies table before running the test suite."""
-    with sqlite3.connect('movies.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM movies")  # Clear all records in the table
-        conn.commit()
-    yield  # This ensures the tests are run after the table is cleared
+# @pytest.fixture(scope="session", autouse=True)
+# def clear_table_before_suite():
+#     """Clear the movies table before running the test suite."""
+#     with sqlite3.connect('movies.db') as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("DELETE FROM movies")  # Clear all records in the table
+#         conn.commit()
+#     yield  # This ensures the tests are run after the table is cleared
 
 
 def normalize_whitespace(sql_query: str) -> str:
@@ -258,6 +258,7 @@ def test_find_movie_by_name(mocker):
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
+    mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_name("Test Movie")
     assert movie.name == "Test Movie"
@@ -285,6 +286,7 @@ def test_find_movie_by_year(mocker):
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
+    mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_year(2023)
     assert movie.year == 2023
@@ -326,6 +328,7 @@ def test_search_movie_by_language(mocker):
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
+    mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_language("fr")
     
@@ -360,6 +363,7 @@ def test_search_movie_by_director(mocker):
         }]
     }
     mocker.patch('requests.get', side_effect=[mock_response, mock_credits])
+    mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_director("Test Director")
     assert movie.director == "Test Director"
@@ -407,6 +411,7 @@ def test_search_movie_by_genre(mocker):
         }]
     }
     mocker.patch('requests.get', return_value=mock_response)
+    mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_genre(28)  # Action genre ID
     assert isinstance(movie, Movie)
