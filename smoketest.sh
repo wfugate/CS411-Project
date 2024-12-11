@@ -173,6 +173,79 @@ search_by_genre(){
     exit 1
   fi
 }
+
+add_movie_to_list()
+{
+  name=$1
+  year=$2
+  language_code=$3
+  director=$4
+  genres=$5
+  favorite=$6
+
+  echo "Adding Movie to the database..."
+  curl -s -X POST "$BASE_URL/movies/add-to-list" -H "Content-Type: application/json" \
+    -d "{\"name\":\"$name\", \"year\":\"$year\", \"language_code\":\"$language_code\", \"director\":\"$director\", \"genres\":\"$genres\", \"favorite\":\"$favorite\"}" | grep -q '"status": "success"'
+  if [ $? -eq 0 ]; then
+    echo "Movie added successfully."
+  else
+    echo "Movie Addition failed."
+    exit 1
+  fi
+}
+
+delete_movie_from_list()
+{
+  movie_id=$1
+
+  echo "Deleting Movie from the database..."
+  curl -s -X DELETE "$BASE_URL/movies/delete-from-list" -H "Content-Type: application/json" \
+    -d "{\"movie_id\":\"$movie_id\"}" | grep -q '"status": "success"'
+  if [ $? -eq 0 ]; then
+    echo "Movie deleted successfully."
+  else
+    echo "Movie Deletion failed."
+    exit 1
+  fi
+}
+
+clear_movie_list()
+{
+  echo "Clearing movie database..."
+  curl -s -X DELETE "$BASE_URL/movies/clear-list" | grep -q '"status": "success"'
+  if [ $? -eq 0 ]; then
+    echo "Database is now empty."
+  else
+    echo "Error occured when clearing database."
+    exit 1
+  fi
+}
+
+mark_movie_as_favorite()
+{
+  name=$1
+  echo "Clearing movie database..."
+  curl -s -X POST "$BASE_URL/movies/mark-as-favorite" -H "Content-Type: application/json" \
+    -d "{\"name\":\"$name\"}" | grep -q '"status": "success"'
+  if [ $? -eq 0 ]; then
+    echo "This movie is marked as favorite."
+  else
+    echo "Error occured when marking the movie favorite."
+    exit 1
+  fi
+}
+
+list_favorite_movies()
+{
+  echo "Retrieving favorite movies..."
+  curl -s -X GET "$BASE_URL/movies/list-favorite" | grep -q '"status": "success"'
+  if [ $? -eq 0 ]; then
+    echo "Favorite movie retrived successfully."
+  else
+    echo "Favorite Movie Retrieval failed."
+    exit 1
+  fi
+}
     
 # Health checks
 check_health
@@ -189,5 +262,11 @@ search_by_year 2020
 search_by_language "en"
 search_by_director "Christopher Nolan"
 search_by_genre 28
+
+add_movie_to_list "Test Movie" 2004 "en" "Someone" "{Action, Comedy}" "True"
+add_movie_to_list "Test Movie 2" 2014 "en" "Someone" "{Action, Comedy}"
+delete_movie_from_list 1
+mark_movie_as_favorite "Test Movie 2"
+list_favorite_movies
 
 echo "All tests passed successfully!"
