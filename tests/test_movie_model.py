@@ -251,13 +251,28 @@ def test_find_movie_by_name(mocker):
     mock_response = mocker.Mock()
     mock_response.json.return_value = {
         'results': [{
+            'id': 1,
             'title': 'Test Movie',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': ['Test']
+            'genre_ids': [28],
         }]
     }
-    mocker.patch('requests.get', return_value=mock_response)
+    mock_genres = mocker.Mock()
+    mock_genres.json.return_value = {
+        'genres': [{
+            'id': 28,
+            'name': 'action'
+        }]
+    }
+    mock_credit = mocker.Mock()
+    mock_credit.json.return_value = {
+        'crew': [{
+            'job': 'Director',
+            'name': 'Directron'
+        }]
+    }
+    mocker.patch('requests.get', side_effect=[mock_response, mock_genres, mock_credit])
     mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_name("Test Movie")
@@ -279,13 +294,28 @@ def test_find_movie_by_year(mocker):
     mock_response = mocker.Mock()
     mock_response.json.return_value = {
         'results': [{
+            'id': 1,
             'title': 'Test Movie 1',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': ["Test"]
+            'genre_ids': [28]
         }]
     }
-    mocker.patch('requests.get', return_value=mock_response)
+    mock_genres = mocker.Mock()
+    mock_genres.json.return_value = {
+        'genres': [{
+            'id': 28,
+            'name': 'action'
+        }]
+    }
+    mock_credit = mocker.Mock()
+    mock_credit.json.return_value = {
+        'crew': [{
+            'job': 'Director',
+            'name': 'Directron'
+        }]
+    }
+    mocker.patch('requests.get', side_effect=[mock_response, mock_genres, mock_credit])
     mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_year(2023)
@@ -321,13 +351,28 @@ def test_search_movie_by_language(mocker):
     mock_response = mocker.Mock()
     mock_response.json.return_value = {
         'results': [{
+            'id': 2,
             'title': 'Test Movie 2',
             'release_date': '2023-01-01',
             'original_language': 'fr',
-            'genres': ["Test"]
+            'genre_ids': [28]
         }]
     }
-    mocker.patch('requests.get', return_value=mock_response)
+    mock_genres = mocker.Mock()
+    mock_genres.json.return_value = {
+        'genres': [{
+            'id': 28,
+            'name': 'action'
+        }]
+    }
+    mock_credit = mocker.Mock()
+    mock_credit.json.return_value = {
+        'crew': [{
+            'job': 'Director',
+            'name': 'Directron'
+        }]
+    }
+    mocker.patch('requests.get', side_effect=[mock_response, mock_genres, mock_credit])
     mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_language("fr")
@@ -355,14 +400,22 @@ def test_search_movie_by_director(mocker):
     mock_credits = mocker.Mock()
     mock_credits.json.return_value = {
         'crew': [{
+            'id': 3,
             'job': 'Director',
             'title': 'Test Movie 3',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': '[Test]'
+            'genre_ids': [28]
         }]
     }
-    mocker.patch('requests.get', side_effect=[mock_response, mock_credits])
+    mock_genres = mocker.Mock()
+    mock_genres.json.return_value = {
+        'genres': [{
+            'id': 28,
+            'name': 'action'
+        }]
+    }
+    mocker.patch('requests.get', side_effect = [mock_response, mock_credits, mock_genres])
     mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_director("Test Director")
@@ -404,13 +457,28 @@ def test_search_movie_by_genre(mocker):
     mock_response = mocker.Mock()
     mock_response.json.return_value = {
         'results': [{
+            'id': 4,
             'title': 'Test Movie 4',
             'release_date': '2023-01-01',
             'original_language': 'en',
-            'genres': ['Test']
+            'genre_ids': [28]
         }]
     }
-    mocker.patch('requests.get', return_value=mock_response)
+    mock_genres = mocker.Mock()
+    mock_genres.json.return_value = {
+        'genres': [{
+            'id': 28,
+            'name': 'action'
+        }]
+    }
+    mock_credit = mocker.Mock()
+    mock_credit.json.return_value = {
+        'crew': [{
+            'job': 'Director',
+            'name': 'Directron'
+        }]
+    }
+    mocker.patch('requests.get', side_effect=[mock_response, mock_genres, mock_credit])
     mocker.patch('movie_collection.models.movie_model.add_movie_to_list')
     
     movie = find_movie_by_genre(28)  # Action genre ID
