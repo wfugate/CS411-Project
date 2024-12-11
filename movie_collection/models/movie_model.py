@@ -9,7 +9,7 @@ from movie_collection.utils.sql_utils import get_db_connection
 import requests
 import random
 
-API_KEY = 'd3931fa0f5369b7ba2bb2981001bb8f9'
+API_KEY = ''
 BASE_URL = 'https://api.themoviedb.org/3'
 
 logger = logging.getLogger(__name__)
@@ -38,6 +38,20 @@ class Movie:
     def __post_init__(self):
         if self.year <= 1900:
             raise ValueError(f"Year must be greater than 1900, got {self.year}")
+
+def get_genres():
+    """
+    Fetch the list of all movie genres from the TMDB API.
+    Returns:
+        dict: A dictionary mapping genre IDs to genre names.
+    """
+    url = f"{BASE_URL}/genre/movie/list"
+    params = {'api_key': API_KEY}
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    genres = {genre['id']: genre['name'] for genre in data.get('genres', [])}
+    return genres
 
 def add_movie_to_list(name: str, year: int, director: str, genres: list, original_language: str, favorite: bool = False) -> None:
     """
@@ -162,15 +176,27 @@ def find_movie_by_name(name: str) -> Movie:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
         release_date = random_movie['release_date']
-        release_year = int(release_date[:4])
+        release_date = random_movie['release_date']
+        if release_date:
+            release_year = int(release_date[:4])
+        else:
+            release_year = "Unknown"
+
+        genre_ids = random_movie['genre_ids']
+        genres_map = get_genres()
         original_language = random_movie['original_language']
-        genres = random_movie.get('genres', [])
+        genres = [genres_map.get(genre_id, "Unknown") for genre_id in genre_ids]
+
+        
+        credits_url = f"{BASE_URL}/movie/{random_movie['id']}/credits"
+        credits_response = requests.get(credits_url, params={'api_key': API_KEY})
+        credits_data = credits_response.json()
+
         director = "Unknown"
-        for crew_member in random_movie.get('credits', {}).get('crew', []):
+        for crew_member in credits_data.get('crew', []):
             if crew_member['job'] == 'Director':
                 director = crew_member['name']
                 break
-
         add_movie_to_list(movie_name, release_year, director, genres, original_language)
 
         return Movie(
@@ -275,15 +301,27 @@ def find_movie_by_year(year: int) -> Movie:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
         release_date = random_movie['release_date']
-        release_year = int(release_date[:4])
+        release_date = random_movie['release_date']
+        if release_date:
+            release_year = int(release_date[:4])
+        else:
+            release_year = "Unknown"
+
+        genre_ids = random_movie['genre_ids']
+        genres_map = get_genres()
         original_language = random_movie['original_language']
-        genres = random_movie.get('genres', [])
+        genres = [genres_map.get(genre_id, "Unknown") for genre_id in genre_ids]
+
+        
+        credits_url = f"{BASE_URL}/movie/{random_movie['id']}/credits"
+        credits_response = requests.get(credits_url, params={'api_key': API_KEY})
+        credits_data = credits_response.json()
+
         director = "Unknown"
-        for crew_member in random_movie.get('credits', {}).get('crew', []):
+        for crew_member in credits_data.get('crew', []):
             if crew_member['job'] == 'Director':
                 director = crew_member['name']
                 break
-
         add_movie_to_list(movie_name, release_year, director, genres, original_language)
         return Movie(
             movie_name,
@@ -321,11 +359,24 @@ def find_movie_by_language(language_code: str) -> Movie:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
         release_date = random_movie['release_date']
-        release_year = int(release_date[:4])
+        release_date = random_movie['release_date']
+        if release_date:
+            release_year = int(release_date[:4])
+        else:
+            release_year = "Unknown"
+
+        genre_ids = random_movie['genre_ids']
+        genres_map = get_genres()
         original_language = random_movie['original_language']
-        genres = random_movie.get('genres', [])
+        genres = [genres_map.get(genre_id, "Unknown") for genre_id in genre_ids]
+
+        
+        credits_url = f"{BASE_URL}/movie/{random_movie['id']}/credits"
+        credits_response = requests.get(credits_url, params={'api_key': API_KEY})
+        credits_data = credits_response.json()
+
         director = "Unknown"
-        for crew_member in random_movie.get('credits', {}).get('crew', []):
+        for crew_member in credits_data.get('crew', []):
             if crew_member['job'] == 'Director':
                 director = crew_member['name']
                 break
@@ -355,7 +406,6 @@ def find_movie_by_director(director_name: str) -> Movie:
     Raises:
         ValueError: If the director is not found or if no movies are found for the director.
     """
-    # Step 1: Search for the director's person ID
     url = f"{BASE_URL}/search/person"
     params = {'api_key': API_KEY, 'query': director_name}
     
@@ -375,10 +425,17 @@ def find_movie_by_director(director_name: str) -> Movie:
             random_movie = random.choice(directed_movies)
             movie_name = random_movie['title']
             release_date = random_movie['release_date']
-            release_year = int(release_date[:4])
-            original_language = random_movie['original_language']
-            genres = random_movie.get('genres', [])
+            release_date = random_movie['release_date']
+            if release_date:
+                release_year = int(release_date[:4])
+            else:
+                release_year = "Unknown"
 
+            genre_ids = random_movie['genre_ids']
+            genres_map = get_genres()
+            original_language = random_movie['original_language']
+            genres = [genres_map.get(genre_id, "Unknown") for genre_id in genre_ids]
+                
             add_movie_to_list(movie_name, release_year, director_name, genres, original_language)
             
             return Movie(
@@ -392,6 +449,7 @@ def find_movie_by_director(director_name: str) -> Movie:
             raise ValueError(f"No movies found with the director '{director_name}'.")
     else: 
         raise ValueError(f"Director not found.")
+
 
 def find_movie_by_genre(genre_id: int) -> Movie:
     """
@@ -416,15 +474,27 @@ def find_movie_by_genre(genre_id: int) -> Movie:
         random_movie = random.choice(data['results'])
         movie_name = random_movie['title']
         release_date = random_movie['release_date']
-        release_year = int(release_date[:4])
+        if release_date:
+            release_year = int(release_date[:4])
+        else:
+            release_year = "Unknown"
+
+        genre_ids = random_movie['genre_ids']
+        genres_map = get_genres()
         original_language = random_movie['original_language']
-        genres = random_movie.get('genres', [])
+        genres = [genres_map.get(genre_id, "Unknown") for genre_id in genre_ids]
+
+        
+        credits_url = f"{BASE_URL}/movie/{random_movie['id']}/credits"
+        credits_response = requests.get(credits_url, params={'api_key': API_KEY})
+        credits_data = credits_response.json()
+
         director = "Unknown"
-        for crew_member in random_movie.get('credits', {}).get('crew', []):
+        for crew_member in credits_data.get('crew', []):
             if crew_member['job'] == 'Director':
                 director = crew_member['name']
                 break
-
+        
         add_movie_to_list(movie_name, release_year, director, genres, original_language)
 
         return Movie(
@@ -436,4 +506,3 @@ def find_movie_by_genre(genre_id: int) -> Movie:
         )
     else:
         raise ValueError(f"No movies found with the genre with ID '{genre_id}'.")
-
