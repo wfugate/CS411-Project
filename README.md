@@ -186,7 +186,7 @@ This App allows users to search, add, delete, and manage a movie catalog.
     ```
 
 ### Route: /movies/mark-as-favorite
-- **Request Type:** POST
+- **Request Type:** PUT
 - **Purpose:** Marks a movie as a favorite in the database.
 - **Request Body:**
   - name (String): The name of the movie to mark as favorite.
