@@ -225,5 +225,9 @@ This App allows users to search, add, delete, and manage a movie catalog.
 ---
 
 ## Extra Documentation
+Steps to run app:
+- 1. Get the API Key from: https://developer.themoviedb.org/reference/intro/getting-started
+- 2. Put it in movie_collection/movie_model.py
+- 3. Run run_docker.sh
 - ![smoketests](./running_smoketests.png)
 - ![docker](./running_docker.png)
