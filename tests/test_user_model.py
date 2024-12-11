@@ -20,7 +20,7 @@ def app():
     app.config['TESTING'] = True
     
     # Import and register your routes
-    from movie_collection.app import create_account, login, update_password
+    from app import create_account, login, update_password
     
     # Register the routes
     app.add_url_rule('/create-account', 'create_account', create_account, methods=['POST'])
