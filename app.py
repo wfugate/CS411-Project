@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, jsonify, make_response, Response, request
 from flask_sqlalchemy import SQLAlchemy
 from movie_collection.db import db
@@ -9,7 +11,12 @@ from movie_collection.models.movie_model import (
     find_movie_by_year,
     find_movie_by_language,
     find_movie_by_director,
-    find_movie_by_genre
+    find_movie_by_genre,
+    add_movie_to_list,
+    delete_movie_from_list,
+    clear_movie_list,
+    mark_movie_as_favorite,
+    list_favorite_movies
 )
 
 from movie_collection.utils.sql_utils import check_database_connection, check_table_exists
@@ -406,6 +413,194 @@ def search_by_genre():
         logger.error('Unexpected error during movie search: %s', str(e))
         return make_response(jsonify({'error': 'An error occurred while searching for the movie'}), 500)
     
+@app.route('/movies/add-to-list', methods=['POST'])
+def add_to_list():
+    """
+    Add a movie to the database.
+
+    Expected Query Parameters:
+        name (str): The name of the movie.
+        year (int): The release year of the movie.
+        director (str): The director of the movie.
+        genres (list): A list of genres associated with the movie.
+        original_language (str): The original language of the movie.
+        favorite (bool, optional): Whether the movie is marked as a favorite. Defaults to False.
+
+    Returns:
+        JSON Response:
+            - success: Movie details, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Adding movie to the database')
+    
+    data = request.get_json()
+
+    name = data.get('name')
+    
+    if not name:
+        logger.error('Missing movie name in request')
+        return make_response(jsonify({'error': 'Movie name is required'}), 400)
+    
+    try:
+        year = int(data.get('year'))
+    except ValueError:
+        logger.error('Invalid year format provided')
+        return make_response(jsonify({'error': 'Year must be a valid integer'}), 400)
+    
+    if year < 1900:
+        logger.error('Invalid year provided: %d', year)
+        return make_response(jsonify({'error': 'Year must be 1900 or later'}), 400)
+    
+    language_code = data.get('language_code')
+    
+    if not language_code:
+        logger.error('Missing language code in request')
+        return make_response(jsonify({'error': 'Language code is required'}), 400)
+
+    director = data.get('director')
+    
+    if not director:
+        logger.error('Missing director name in request')
+        return make_response(jsonify({'error': 'Director name is required'}), 400)
+    
+    genres = data.get('genres')
+
+    if not genres:
+        logger.error('Missing genres in request')
+        return make_response(jsonify({'error': 'Genre is required'}), 400)
+
+    favorite = data.get('favorite')
+
+    if favorite == 'True':
+        favorite = True
+    else:
+        favorite = False
+    
+    try:
+        add_movie_to_list(name, year, director, genres, language_code, favorite)
+        logger.info('Movie added: %s', name)
+        return make_response(jsonify({
+            'status': 'success'
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while adding movie to the database'}), 500)
+    
+@app.route('/movies/delete-from-list', methods=['DELETE'])
+def delete_from_list():
+    """
+    Soft deletes a movie from the catalog by marking it as deleted.
+
+    Expected Query Parameters:
+        movie_id (int): The ID of the movie to delete.
+
+    Returns:
+        JSON Response:
+            - success: {"status": "success"}, 200
+            - error: {"error": error_message}, status_code
+    """
+    logger.info('Deleting movie from the database')
+    
+    data = request.get_json()
+    
+    try:
+        movie_id = int(data.get('movie_id'))
+    except ValueError:
+        logger.error('Invalid movie_id format provided')
+        return make_response(jsonify({'error': 'Year must be a valid integer'}), 400)
+    
+    try:
+        delete_movie_from_list(movie_id)
+        logger.info('Movie deleted: %d', movie_id)
+        return make_response(jsonify({
+            'status': 'success'
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while deleting movie from the database'}), 500)
+
+@app.route('/movies/clear-list', methods=['DELETE'])
+def clear_list():
+    """
+    Recreates the movie table, effectively deleting all movies.
+
+    Returns:
+        JSON Response:
+            - success: {"status": "success"}, 200
+            - error: {"error": error_message}, status_code
+    """
+    try:
+        clear_movie_list()
+        logger.info('Clearing Database')
+        return make_response(jsonify({
+            'status': 'success'
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while clearing the database'}), 500)
+    
+@app.route('/movies/mark-as-favorite', methods=['POST'])
+def mark_as_favorite():
+    """
+    Marks a movie as a favorite in the database.
+
+    Expected Query Parameters:
+        name (str): The name of the movie to mark as favorite.
+
+    Returns:
+        JSON Response:
+            - success: {"status": "success"}, 200
+            - error: {"error": error_message}, status_code
+    """
+    data = request.get_json()
+    name = data.get('name')
+
+    try:
+        mark_movie_as_favorite(name)
+        logger.info('Marking %s as favorite', name)
+        return make_response(jsonify({
+            'status': 'success'
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while marking a movie favorite'}), 500)
+    
+@app.route('/movies/list-favorite', methods=['GET'])
+def list_favorite() -> list:
+    """
+    Fetches the names of all favorite movies from the database.
+
+    Returns:
+        JSON Response:
+            - success: Movie List, 200
+            - error: {"error": error_message}, status_code
+    """
+    try:
+        logger.info('Retriving Favorites')
+        favorite_movies = list_favorite_movies()
+        return make_response(jsonify({
+            'status': 'success',
+            'favorite_movies': json.dumps(favorite_movies)
+        }), 200)
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return make_response(jsonify({'error': str(e)}), 404)
+    except Exception as e:
+        logger.error('Unexpected error: %s', str(e))
+        return make_response(jsonify({'error': 'An error occurred while retriving favorite movies'}), 500)
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
